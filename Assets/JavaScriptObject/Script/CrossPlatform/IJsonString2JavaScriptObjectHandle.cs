@@ -1,4 +1,8 @@
-﻿public interface IJsonString2JavaScriptObjectHandle
+﻿namespace CrossPlatformJson
 {
-    JavaScriptObject ToJavaScriptObject(string json);
+    public interface IJsonString2JavaScriptObjectHandle
+    {
+        JavaScriptObject ToJavaScriptObject(string json);
+    }
+
 }
