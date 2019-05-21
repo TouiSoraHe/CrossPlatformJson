@@ -306,6 +306,11 @@
             }
         }
 
+        public string ToJson()
+        {
+            return ToString();
+        }
+
         public override string ToString()
         {
             switch (Type)

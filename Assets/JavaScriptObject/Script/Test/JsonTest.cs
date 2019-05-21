@@ -13,6 +13,9 @@ public class JsonTest : MonoBehaviour {
         Debug.Log("判断test字段是否存在:"+jsonObj.ContainsKey("test"));
         Debug.Log("获取子对象data:"+jsonObj["data"]);
         Debug.Log("获取子对象data的name字段:" + jsonObj["data"]["name"]);
+        Debug.Log("修改data的值");
+        jsonObj["data"] = new JavaScriptObject(1);
+        Debug.Log("获取子对象data:" + jsonObj["data"]);
         //添加一个新的字段
         jsonObj.Add("test add num", 1);
         jsonObj.Add("test add boolean", false);
@@ -26,7 +29,7 @@ public class JsonTest : MonoBehaviour {
         subObj.Add("sub obj num", 1);
         subObj.Add("sub obj boolean", false);
         jsonObj.Add("test add subObject", subObj);
-        Debug.Log("转换为json:" + jsonObj.ToString());
+        Debug.Log("转换为json:" + jsonObj.ToJson());
         Debug.Log("-----------遍历----------");
         foreach (var item in jsonObj)
         {
