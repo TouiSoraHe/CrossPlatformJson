@@ -1,0 +1,139 @@
+{
+  "code": 200,
+  "message": "操作成功",
+  "data": {
+    "m3sId": 36,
+    "name": "demo",
+    "packStatus": "2",
+    "packTime": "2019-05-21T06:12:15.000+0000",
+    "packVersion": 2,
+    "lastUpdateTime": "2019-05-21T06:12:04.000+0000",
+    "packUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8Fzjlr-AVJxbAAAuMJKkhjk452.zip?attname=36.zip",
+    "files": {
+      "fileId": 177,
+      "fileType": "dir",
+      "fileName": "demo",
+      "fileUrl": null,
+      "fileVersion": null,
+      "children": [
+        {
+          "fileId": 180,
+          "fileType": "dir",
+          "fileName": "luascript",
+          "fileUrl": null,
+          "fileVersion": null,
+          "children": [
+            {
+              "fileId": 181,
+              "fileType": "file",
+              "fileName": "util.lua",
+              "fileUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8Fzjk_KAHuPPAAAD1AAlZa4146.lua?attname=util.lua",
+              "fileVersion": 1,
+              "children": null
+            },
+            {
+              "fileId": 182,
+              "fileType": "dir",
+              "fileName": "wh",
+              "fileUrl": null,
+              "fileVersion": null,
+              "children": [
+                {
+                  "fileId": 183,
+                  "fileType": "file",
+                  "fileName": "101.lua",
+                  "fileUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8FzjlBaAbmDFAAAM-4_sTmI374.lua?attname=101.lua",
+                  "fileVersion": 1,
+                  "children": null
+                },
+                {
+                  "fileId": 184,
+                  "fileType": "file",
+                  "fileName": "102.lua",
+                  "fileUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8FzjlC-AGd8kAAANIx6u8v0948.lua?attname=102.lua",
+                  "fileVersion": 1,
+                  "children": null
+                },
+                {
+                  "fileId": 185,
+                  "fileType": "file",
+                  "fileName": "103.lua",
+                  "fileUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8FzjlEKAHUZUAAANAQkE7XU873.lua?attname=103.lua",
+                  "fileVersion": 1,
+                  "children": null
+                }
+              ]
+            },
+            {
+              "fileId": 186,
+              "fileType": "dir",
+              "fileName": "xx",
+              "fileUrl": null,
+              "fileVersion": null,
+              "children": [
+                {
+                  "fileId": 187,
+                  "fileType": "file",
+                  "fileName": "101.lua",
+                  "fileUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8FzjlF-AHQzXAAANTUrEvNA630.lua?attname=101.lua",
+                  "fileVersion": 1,
+                  "children": null
+                },
+                {
+                  "fileId": 188,
+                  "fileType": "file",
+                  "fileName": "102.lua",
+                  "fileUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8FzjlHGAELpXAAAOJ7n8Gww505.lua?attname=102.lua",
+                  "fileVersion": 1,
+                  "children": null
+                },
+                {
+                  "fileId": 189,
+                  "fileType": "file",
+                  "fileName": "103.lua",
+                  "fileUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8FzjlH-AcF00AAAOURkAeqM394.lua?attname=103.lua",
+                  "fileVersion": 1,
+                  "children": null
+                },
+                {
+                  "fileId": 190,
+                  "fileType": "file",
+                  "fileName": "104.lua",
+                  "fileUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8FzjlI6AAxE-AAANk5M1s94538.lua?attname=104.lua",
+                  "fileVersion": 1,
+                  "children": null
+                },
+                {
+                  "fileId": 192,
+                  "fileType": "file",
+                  "fileName": "105.lua",
+                  "fileUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8FzjlKuAaVD8AAAOYWgg3OA636.lua?attname=105.lua",
+                  "fileVersion": 1,
+                  "children": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "fileId": 178,
+          "fileType": "file",
+          "fileName": "module.json",
+          "fileUrl": "http://192.168.0.240/group1/M00/00/52/wKgA8FzjlrSACk4bAAAS0XvOGnA14.json?attname=module.json",
+          "fileVersion": 3,
+          "children": null
+        },
+        {
+          "fileId": 179,
+          "fileType": "file",
+          "fileName": "readme.md",
+          "fileUrl": null,
+          "fileVersion": null,
+          "children": null
+        }
+      ]
+    }
+  },
+  "timestamp": "1558422277814",
+  "sign": "4f66615adb7c5591d659e77b4009ece0"
+}
