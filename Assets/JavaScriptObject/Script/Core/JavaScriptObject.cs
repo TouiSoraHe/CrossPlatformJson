@@ -138,6 +138,21 @@
             _arrayValue.Add(value);
         }
 
+        public void Add(double value)
+        {
+            Add(new JavaScriptObject(value));
+        }
+
+        public void Add(string value)
+        {
+            Add(new JavaScriptObject(value));
+        }
+
+        public void Add(bool value)
+        {
+            Add(new JavaScriptObject(value));
+        }
+
         public void Add(string key, JavaScriptObject value)
         {
             if (Type == JavaScriptObjectType.Null)
@@ -150,6 +165,21 @@
                 throw new Exception("该对象不是一个对象类型");
             }
             _objectValue.Add(key, value);
+        }
+
+        public void Add(string key, double value)
+        {
+            Add(key, new JavaScriptObject(value));
+        }
+
+        public void Add(string key, string value)
+        {
+            Add(key, new JavaScriptObject(value));
+        }
+
+        public void Add(string key, bool value)
+        {
+            Add(key, new JavaScriptObject(value));
         }
 
         public void Remove(int index)
