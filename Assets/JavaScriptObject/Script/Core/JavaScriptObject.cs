@@ -21,7 +21,7 @@
         private string _stringValue;
         private bool _boolValue;
         private List<JavaScriptObject> _arrayValue;
-        private SortedDictionary<string, JavaScriptObject> _objectValue;
+        private Dictionary<string, JavaScriptObject> _objectValue;
 
         public JavaScriptObject(double value)
         {
@@ -158,7 +158,7 @@
             if (Type == JavaScriptObjectType.Null)
             {
                 Type = JavaScriptObjectType.Object;
-                _objectValue = new SortedDictionary<string, JavaScriptObject>();
+                _objectValue = new Dictionary<string, JavaScriptObject>();
             }
             if (Type != JavaScriptObjectType.Object)
             {
