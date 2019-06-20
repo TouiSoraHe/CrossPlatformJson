@@ -41,9 +41,17 @@
             _boolValue = value;
         }
 
-        public JavaScriptObject()
+        public JavaScriptObject(JavaScriptObjectType type = JavaScriptObjectType.Null)
         {
-            Type = JavaScriptObjectType.Null;
+            Type = type;
+            if (Type == JavaScriptObjectType.Object)
+            {
+                _objectValue = new Dictionary<string, JavaScriptObject>();
+            }
+            else if (Type == JavaScriptObjectType.Array)
+            {
+                _arrayValue = new List<JavaScriptObject>();
+            }
         }
 
         public double GetNumber()

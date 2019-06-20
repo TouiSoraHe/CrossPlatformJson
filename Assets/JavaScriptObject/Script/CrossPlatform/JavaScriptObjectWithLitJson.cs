@@ -7,34 +7,37 @@
     {
         public JavaScriptObject ToJavaScriptObject(string json)
         {
-            JavaScriptObject jsonObj = new JavaScriptObject();
+            JavaScriptObject jsonObj = null;
             JsonData jsonData = JsonMapper.ToObject(json);
-            Process(jsonObj, jsonData);
+            Process(out jsonObj, jsonData);
             return jsonObj;
         }
 
-        private void Process(JavaScriptObject jsonObj, JsonData jsonData)
+        private void Process(out JavaScriptObject jsonObj, JsonData jsonData)
         {
             switch (jsonData.GetJsonType())
             {
                 case JsonType.None:
+                    jsonObj = new JavaScriptObject();
                     break;
                 case JsonType.Object:
+                    jsonObj = new JavaScriptObject(JavaScriptObject.JavaScriptObjectType.Object);
                     ProcessObject(jsonObj, jsonData);
                     break;
                 case JsonType.Array:
+                    jsonObj = new JavaScriptObject(JavaScriptObject.JavaScriptObjectType.Array);
                     ProcessArray(jsonObj, jsonData);
                     break;
                 case JsonType.String:
-                    jsonObj.SetString(jsonData.ToString());
+                    jsonObj = new JavaScriptObject(jsonData.ToString());
                     break;
                 case JsonType.Int:
                 case JsonType.Long:
                 case JsonType.Double:
-                    jsonObj.SetNumber(double.Parse(jsonData.ToString()));
+                    jsonObj = new JavaScriptObject(double.Parse(jsonData.ToString()));
                     break;
                 case JsonType.Boolean:
-                    jsonObj.SetBoolean(bool.Parse(jsonData.ToString()));
+                    jsonObj = new JavaScriptObject(bool.Parse(jsonData.ToString()));
                     break;
                 default:
                     throw new System.Exception("意外情况");
@@ -45,13 +48,13 @@
         {
             foreach (var item in jsonData.Keys)
             {
-                JavaScriptObject value = new JavaScriptObject();
-                jsonObj.Add(item, value);
                 JsonData subJsonData = jsonData[item];
+                JavaScriptObject value = new JavaScriptObject();
                 if (subJsonData != null)
                 {
-                    Process(value, subJsonData);
+                    Process(out value, subJsonData);
                 }
+                jsonObj.Add(item, value);
             }
         }
 
@@ -59,13 +62,13 @@
         {
             for (int i = 0; i < jsonData.Count; i++)
             {
-                JavaScriptObject value = new JavaScriptObject();
-                jsonObj.Add(value);
                 JsonData subJsonData = jsonData[i];
+                JavaScriptObject value = new JavaScriptObject();
                 if (subJsonData != null)
                 {
-                    Process(value, subJsonData);
+                    Process(out value, subJsonData);
                 }
+                jsonObj.Add(value);
             }
         }
     }

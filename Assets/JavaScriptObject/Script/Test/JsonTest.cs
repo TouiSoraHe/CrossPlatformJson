@@ -56,11 +56,15 @@ public class JsonTest : MonoBehaviour {
         {
             Debug.Log(item.Key + ":" + item.Value);
         }
+
+        JavaScriptObject helloWorldJsonObj = JavaScriptObjectFactory.CreateJavaScriptObject("{}");
+        HelloWorld helloWorld = JsonUtility.FromJson<HelloWorld>(helloWorldJsonObj.ToJson());
     }
 
 
 }
 
+[Serializable]
 class HelloWorld
 {
     public string message;
