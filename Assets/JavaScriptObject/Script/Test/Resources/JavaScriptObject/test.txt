@@ -1,0 +1,60 @@
+{
+   "min_position": 6,
+   "has_more_items": true,
+   "items_html": "Bike",
+   "new_latent_count": 1,
+   "data": {
+      "length": 25,
+      "text": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+   },
+   "numericalArray": [
+      31,
+      28,
+      29,
+      29,
+      32
+   ],
+   "StringArray": [
+      "Carbon",
+      "Oxygen",
+      "Carbon",
+      "Oxygen"
+   ],
+   "multipleTypesArray": 5,
+   "objArray": [
+      {
+         "class": "lower",
+         "age": 3
+      },
+      {
+         "class": "lower",
+         "age": 3
+      },
+      {
+         "class": "middle",
+         "age": 6
+      },
+      {
+         "class": "lower",
+         "age": 4
+      },
+      {
+         "class": "upper",
+         "age": 7
+      }
+   ],
+	"mixArray":[
+		false,
+		true,
+		"你",
+		"\"引号转义字符测试\"",
+		"\n换号转义字符测试",
+		"\u52b2",
+		123.123,
+		[1,2],
+		{
+			"\"引号转义字符测试\"": "lower",
+			"age": 3
+		}
+	]
+}

@@ -3,12 +3,12 @@
     public class JavaScriptObjectFactory
     {
         private static IJsonString2JavaScriptObjectHandle jsonString2JavaScriptObject = null;
+        private static IJsonString2JavaScriptObjectHandle jsonParse = null;
 
         static JavaScriptObjectFactory()
         {
 #if UNITY_STANDALONE_WIN || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR
-            jsonString2JavaScriptObject = new JavaScriptObjectWithLitJson();
-
+        jsonString2JavaScriptObject = new JavaScriptObjectWithLitJson();
 #elif UNITY_UWP
         jsonString2JavaScriptObject = new JavaScriptObjectWithUWP();
 #else
@@ -16,9 +16,20 @@
 #endif
         }
 
-        public static JavaScriptObject CreateJavaScriptObject(string json)
+        public static JavaScriptObject CreateJavaScriptObject(string json, bool useJsonParse = true)
         {
+            if (useJsonParse)
+                return CreateJavaScriptObjectWithJsonParse(json);
             return jsonString2JavaScriptObject.ToJavaScriptObject(json);
+        }
+
+        public static JavaScriptObject CreateJavaScriptObjectWithJsonParse(string json)
+        {
+            if (jsonParse == null)
+            {
+                jsonParse = new JavaScriptObjectWithJsonParse();
+            }
+            return jsonParse.ToJavaScriptObject(json);
         }
     }
 

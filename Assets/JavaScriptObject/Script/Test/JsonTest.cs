@@ -58,7 +58,7 @@ public class JsonTest : MonoBehaviour {
         }
 
         JavaScriptObject helloWorldJsonObj = JavaScriptObjectFactory.CreateJavaScriptObject("{}");
-        HelloWorld helloWorld = JsonUtility.FromJson<HelloWorld>(helloWorldJsonObj.ToJson());
+        JsonUtility.FromJson<HelloWorld>(helloWorldJsonObj.ToJson());
     }
 
 
