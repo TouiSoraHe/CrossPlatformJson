@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Text;
 
     public class JavaScriptObject : IEnumerable<KeyValuePair<JavaScriptObject, JavaScriptObject>>
     {
@@ -17,28 +18,26 @@
         }
 
         private JavaScriptObjectType _type;
-        private double _numberValue;
-        private string _stringValue;
-        private bool _boolValue;
+        private object _baseValue;
         private List<JavaScriptObject> _arrayValue;
         private Dictionary<string, JavaScriptObject> _objectValue;
 
         public JavaScriptObject(double value)
         {
             Type = JavaScriptObjectType.Number;
-            _numberValue = value;
+            _baseValue = value;
         }
 
         public JavaScriptObject(string value)
         {
             Type = JavaScriptObjectType.String;
-            _stringValue = value;
+            _baseValue = value;
         }
 
         public JavaScriptObject(bool value)
         {
             Type = JavaScriptObjectType.Boolean;
-            _boolValue = value;
+            _baseValue = value;
         }
 
         public JavaScriptObject(JavaScriptObjectType type = JavaScriptObjectType.Null)
@@ -58,7 +57,7 @@
         {
             if (Type == JavaScriptObjectType.Number)
             {
-                return _numberValue;
+                return (double)_baseValue;
             }
             else
             {
@@ -70,7 +69,7 @@
         {
             if (Type == JavaScriptObjectType.String)
             {
-                return _stringValue;
+                return (string)_baseValue;
             }
             else
             {
@@ -82,7 +81,7 @@
         {
             if (Type == JavaScriptObjectType.Boolean)
             {
-                return _boolValue;
+                return (bool)_baseValue;
             }
             else
             {
@@ -274,7 +273,7 @@
             }
             if (Type == JavaScriptObjectType.Number)
             {
-                _numberValue = value;
+                _baseValue = value;
             }
             else
             {
@@ -290,7 +289,7 @@
             }
             if (Type == JavaScriptObjectType.String)
             {
-                _stringValue = value;
+                _baseValue = value;
             }
             else
             {
@@ -306,7 +305,7 @@
             }
             if (Type == JavaScriptObjectType.Boolean)
             {
-                _boolValue = value;
+                _baseValue = value;
             }
             else
             {
@@ -316,54 +315,91 @@
 
         public string ToJson()
         {
-            return ToString();
-        }
-
-        public override string ToString()
-        {
             switch (Type)
             {
                 case JavaScriptObjectType.Null:
                     return "null";
                 case JavaScriptObjectType.Boolean:
-                    return _boolValue ? "true" : "false";
+                    return GetBoolean() ? "true" : "false";
                 case JavaScriptObjectType.Number:
-                    return _numberValue.ToString();
+                    return GetNumber().ToString();
                 case JavaScriptObjectType.String:
-                    return "\"" + _stringValue + "\"";
+                    return StringifyString(GetString());
                 case JavaScriptObjectType.Array:
                     {
-                        string ret = "[";
+                        StringBuilder ret = new StringBuilder();
+                        ret.Append("[");
                         for (int i = 0; i < _arrayValue.Count; i++)
                         {
                             if (i != 0)
                             {
-                                ret += ",";
+                                ret.Append(",");
                             }
-                            ret += _arrayValue[i].ToString();
+                            ret.Append(_arrayValue[i].ToJson());
                         }
-                        ret += "]";
-                        return ret;
+                        ret.Append("]");
+                        return ret.ToString();
                     }
                 case JavaScriptObjectType.Object:
                     {
-                        string ret = "{";
+                        StringBuilder ret = new StringBuilder();
+                        ret.Append("{");
                         int index = 0;
                         foreach (var item in _objectValue)
                         {
                             if (index != 0)
                             {
-                                ret += ",";
+                                ret.Append(",");
                             }
-                            ret += "\"" + item.Key + "\":" + item.Value.ToString();
+                            ret.Append(StringifyString(item.Key));
+                            ret.Append(":");
+                            ret.Append(item.Value.ToJson());
                             index++;
                         }
-                        ret += "}";
-                        return ret;
+                        ret.Append("}");
+                        return ret.ToString();
                     }
                 default:
                     throw new Exception("意外的情况");
             }
+        }
+
+        private static readonly char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+        private static string StringifyString(string value)
+        {
+            StringBuilder str = new StringBuilder();
+            str.Append("\"");
+            for (int i = 0; i < value.Length; i++)
+            {
+                char ch = value[i];
+                switch (ch)
+                {
+                    case '\"': str.Append( '\\'); str.Append('\"'); break;
+                    case '\\': str.Append('\\'); str.Append('\\'); break;
+                    case '\b': str.Append('\\'); str.Append('b'); break;
+                    case '\f': str.Append('\\'); str.Append('f'); break;
+                    case '\n': str.Append('\\'); str.Append('n'); break;
+                    case '\r': str.Append('\\'); str.Append('r'); break;
+                    case '\t': str.Append('\\'); str.Append('t'); break;
+                    default:
+                        if (ch < 0x20)
+                        {
+                            str.Append('\\'); str.Append('u'); str.Append('0'); str.Append('0');
+                            str.Append(hexDigits[ch >> 4]);
+                            str.Append(hexDigits[ch & 15]);
+                        }
+                        else
+                            str.Append(ch);
+                        break;
+                }
+            }
+            str.Append("\"");
+            return str.ToString();
+        }
+
+        public override string ToString()
+        {
+            return ToJson();
         }
 
         public IEnumerator<KeyValuePair<JavaScriptObject, JavaScriptObject>> GetEnumerator()
