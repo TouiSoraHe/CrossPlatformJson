@@ -32,7 +32,7 @@
             {
                 for (int i = 0; i < 1000; i++)
                 {
-                    JsonMapper.ToObject(json);
+                    LitJson.JsonMapper.ToObject(json);
                 }
             });
             Debug.Log("litJson:" + litJson);

@@ -8,7 +8,7 @@
         public JavaScriptObject ToJavaScriptObject(string json)
         {
             JavaScriptObject jsonObj = null;
-            JsonData jsonData = JsonMapper.ToObject(json);
+            JsonData jsonData = LitJson.JsonMapper.ToObject(json);
             Process(out jsonObj, jsonData);
             return jsonObj;
         }

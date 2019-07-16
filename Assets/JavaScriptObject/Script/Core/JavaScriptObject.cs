@@ -7,6 +7,9 @@
 
     public class JavaScriptObject : IEnumerable<KeyValuePair<JavaScriptObject, JavaScriptObject>>
     {
+        /// <summary>
+        /// JavaScriptObject的类型
+        /// </summary>
         public enum JavaScriptObjectType
         {
             Null = 0,
@@ -17,9 +20,24 @@
             Object = 5
         }
 
+        /// <summary>
+        /// 类型
+        /// </summary>
         private JavaScriptObjectType _type;
+
+        /// <summary>
+        /// 用来存放基本数据类型
+        /// </summary>
         private object _baseValue;
+
+        /// <summary>
+        /// 用来存放数组
+        /// </summary>
         private List<JavaScriptObject> _arrayValue;
+
+        /// <summary>
+        /// 用来存放对象
+        /// </summary>
         private Dictionary<string, JavaScriptObject> _objectValue;
 
         public JavaScriptObject(double value)
@@ -32,6 +50,12 @@
         {
             Type = JavaScriptObjectType.String;
             _baseValue = value;
+        }
+
+        public JavaScriptObject(char value)
+        {
+            Type = JavaScriptObjectType.String;
+            _baseValue = new string(value,1);
         }
 
         public JavaScriptObject(bool value)
@@ -155,6 +179,11 @@
             Add(new JavaScriptObject(value));
         }
 
+        public void Add(char value)
+        {
+            Add(new JavaScriptObject(value));
+        }
+
         public void Add(bool value)
         {
             Add(new JavaScriptObject(value));
@@ -184,6 +213,11 @@
             Add(key, new JavaScriptObject(value));
         }
 
+        public void Add(string key, char value)
+        {
+            Add(key, new JavaScriptObject(value));
+        }
+
         public void Add(string key, bool value)
         {
             Add(key, new JavaScriptObject(value));
@@ -198,6 +232,10 @@
             _arrayValue.RemoveAt(index);
         }
 
+        /// <summary>
+        /// 从对象中移除一个字段,该类型必须为Object
+        /// </summary>
+        /// <param name="key">需要移除的字段名</param>
         public void Remove(string key)
         {
             if (Type != JavaScriptObjectType.Object)
@@ -207,6 +245,11 @@
             _objectValue.Remove(key);
         }
 
+        /// <summary>
+        /// 判断指定的字段名是否存在该对象中,类型必须为Object
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool ContainsKey(string key)
         {
             if (Type != JavaScriptObjectType.Object)
@@ -216,6 +259,9 @@
             return _objectValue.ContainsKey(key);
         }
 
+        /// <summary>
+        /// 清空对象/数组的所有子对象/子元素
+        /// </summary>
         public void Clear()
         {
             if (_objectValue != null)
@@ -228,6 +274,9 @@
             }
         }
 
+        /// <summary>
+        /// 获取该对象/数组的子对象/子元素数量,对于Null永远返回0,对于基本数据类型永远返回1
+        /// </summary>
         public int Count
         {
             get
@@ -295,6 +344,11 @@
             {
                 throw new Exception("该对象不是一个字符串类型");
             }
+        }
+
+        public void SetString(char value)
+        {
+            SetString(new string(value, 1));
         }
 
         public void SetBoolean(bool value)
