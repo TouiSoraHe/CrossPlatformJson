@@ -45,8 +45,8 @@
 
         static void TestParseNull()
         {
-            Assert.IsTrue(BaseTest("null", JsonParse.ParseResult.OK).Type == JavaScriptObject.JavaScriptObjectType.Null);
-            Assert.IsTrue(BaseTest(" \nnull\n ", JsonParse.ParseResult.OK).Type == JavaScriptObject.JavaScriptObjectType.Null);
+            Assert.IsTrue(BaseTest("null", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Null);
+            Assert.IsTrue(BaseTest(" \nnull\n ", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Null);
         }
 
         static void TestParseTrue()
@@ -209,10 +209,10 @@
         static void TestParseArray()
         {
             Assert.IsTrue(BaseTest("[ ]", JsonParse.ParseResult.OK).Count == 0);
-            Assert.IsTrue(BaseTest("[ ]", JsonParse.ParseResult.OK).Type == JavaScriptObject.JavaScriptObjectType.Array);
+            Assert.IsTrue(BaseTest("[ ]", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Array);
 
             JavaScriptObject jsonObj = BaseTest("[ null , false , true , 123 , \"abc\" ]", JsonParse.ParseResult.OK);
-            Assert.IsTrue(jsonObj[0].Type == JavaScriptObject.JavaScriptObjectType.Null);
+            Assert.IsTrue(jsonObj[0].Type == JavaScriptObjectType.Null);
             Assert.IsTrue(jsonObj[1].GetBoolean() == false);
             Assert.IsTrue(jsonObj[2].GetBoolean() == true);
             Assert.IsTrue(jsonObj[3].GetNumber() == 123);
@@ -239,7 +239,7 @@
         static void TestParseObject()
         {
             Assert.IsTrue(BaseTest(" { } ", JsonParse.ParseResult.OK).Count == 0);
-            Assert.IsTrue(BaseTest(" { } ", JsonParse.ParseResult.OK).Type == JavaScriptObject.JavaScriptObjectType.Object);
+            Assert.IsTrue(BaseTest(" { } ", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Object);
 
             JavaScriptObject jsonObj = BaseTest(
                 " { " +
@@ -260,7 +260,7 @@
 
                 " } "
                 , JsonParse.ParseResult.OK);
-            Assert.IsTrue(jsonObj["n"].Type == JavaScriptObject.JavaScriptObjectType.Null);
+            Assert.IsTrue(jsonObj["n"].Type == JavaScriptObjectType.Null);
             Assert.IsTrue(jsonObj["f"].GetBoolean() == false);
             Assert.IsTrue(jsonObj["t"].GetBoolean() == true);
             Assert.IsTrue(jsonObj["i"].GetNumber() == 123);

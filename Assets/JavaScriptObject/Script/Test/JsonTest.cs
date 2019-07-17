@@ -59,6 +59,8 @@ public class JsonTest : MonoBehaviour {
 
         JavaScriptObject helloWorldJsonObj = JavaScriptObjectFactory.CreateJavaScriptObject("{}");
         JsonUtility.FromJson<HelloWorld>(helloWorldJsonObj.ToJson());
+
+        Debug.Log((char)0x1f);
     }
 
 
