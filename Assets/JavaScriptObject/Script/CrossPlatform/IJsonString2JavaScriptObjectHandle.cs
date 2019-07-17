@@ -4,5 +4,4 @@
     {
         JavaScriptObject ToJavaScriptObject(string json);
     }
-
 }

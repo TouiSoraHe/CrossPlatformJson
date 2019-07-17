@@ -1,7 +1,6 @@
 ﻿namespace CrossPlatformJson
 {
 #if UNITY_UWP
-
     using Windows.Data.Json;
 
     public class JavaScriptObjectWithUWP : IJsonString2JavaScriptObjectHandle

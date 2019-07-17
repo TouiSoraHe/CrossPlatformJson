@@ -2,13 +2,13 @@
 {
     public class JavaScriptObjectFactory
     {
-        private static IJsonString2JavaScriptObjectHandle jsonString2JavaScriptObject = null;
-        private static IJsonString2JavaScriptObjectHandle jsonParse = null;
+        private static readonly IJsonString2JavaScriptObjectHandle jsonString2JavaScriptObject;
+        private static IJsonString2JavaScriptObjectHandle jsonParse;
 
         static JavaScriptObjectFactory()
         {
 #if UNITY_STANDALONE_WIN || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR
-        jsonString2JavaScriptObject = new JavaScriptObjectWithLitJson();
+            jsonString2JavaScriptObject = new JavaScriptObjectWithLitJson();
 #elif UNITY_UWP
         jsonString2JavaScriptObject = new JavaScriptObjectWithUWP();
 #else
@@ -25,12 +25,8 @@
 
         public static JavaScriptObject CreateJavaScriptObjectWithJsonParse(string json)
         {
-            if (jsonParse == null)
-            {
-                jsonParse = new JavaScriptObjectWithJsonParse();
-            }
+            if (jsonParse == null) jsonParse = new JavaScriptObjectWithJsonParse();
             return jsonParse.ToJavaScriptObject(json);
         }
     }
-
 }

@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class D<T> {
-    public T d = default(T);
+﻿public class D<T>
+{
+    public T d;
 
     public D()
     {

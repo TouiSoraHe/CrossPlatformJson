@@ -1,20 +1,19 @@
-﻿using CrossPlatformJson;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using CrossPlatformJson;
 using UnityEngine;
-using System;
 
-public class JsonTest : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
+public class JsonTest : MonoBehaviour
+{
+    // Use this for initialization
+    private void Start()
+    {
         JavaScriptObjectTest();
     }
 
     private void JavaScriptObjectTest()
     {
         //创建一个JavaScriptObject对象
-        JavaScriptObject jsonObj = JavaScriptObjectFactory.CreateJavaScriptObject(Resources.Load<TextAsset>("test").text);
+        var jsonObj = JavaScriptObjectFactory.CreateJavaScriptObject(Resources.Load<TextAsset>("test").text);
         Debug.Log("----------------转换为JSON---------------");
         Debug.Log(jsonObj.ToJson());
         Debug.Log("----------------判断code属性是否存在---------------");
@@ -37,14 +36,14 @@ public class JsonTest : MonoBehaviour {
         jsonObj.Add("test add string", "new string");
         Debug.Log(jsonObj["test add string"].GetString());
         Debug.Log("----------------添加一个数组属性test add array---------------");
-        JavaScriptObject array = new JavaScriptObject();
+        var array = new JavaScriptObject();
         array.Add(1);
         array.Add(2);
         array.Add(3);
         jsonObj.Add("test add array", array);
         Debug.Log(jsonObj["test add array"].ToJson());
         Debug.Log("----------------添加一个object属性test add subObject---------------");
-        JavaScriptObject subObj = new JavaScriptObject();
+        var subObj = new JavaScriptObject();
         subObj.Add("sub obj num", 1);
         subObj.Add("sub obj boolean", false);
         jsonObj.Add("test add subObject", subObj);
@@ -52,26 +51,21 @@ public class JsonTest : MonoBehaviour {
         Debug.Log("----------------修改后的json---------------");
         Debug.Log(jsonObj.ToJson());
         Debug.Log("----------------遍历所有根属性---------------");
-        foreach (var item in jsonObj)
-        {
-            Debug.Log(item.Key + ":" + item.Value);
-        }
+        foreach (var item in jsonObj) Debug.Log(item.Key + ":" + item.Value);
 
-        JavaScriptObject helloWorldJsonObj = JavaScriptObjectFactory.CreateJavaScriptObject("{}");
+        var helloWorldJsonObj = JavaScriptObjectFactory.CreateJavaScriptObject("{}");
         JsonUtility.FromJson<HelloWorld>(helloWorldJsonObj.ToJson());
 
-        Debug.Log((char)0x1f);
+        Debug.Log((char) 0x1f);
     }
-
-
 }
 
 [Serializable]
-class HelloWorld
+internal class HelloWorld
 {
-    public string message;
     public int id;
     public bool isSuccess;
+    public string message;
 
     public HelloWorld()
     {
@@ -86,6 +80,6 @@ class HelloWorld
 
     public override string ToString()
     {
-        return "message:"+message+";id:"+id+";isSuccess:"+isSuccess;
+        return "message:" + message + ";id:" + id + ";isSuccess:" + isSuccess;
     }
 }

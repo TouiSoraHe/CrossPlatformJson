@@ -380,8 +380,8 @@ namespace CrossPlatformJson
 
         private class JsonContext
         {
-            public int index;
             private readonly string json;
+            public int index;
 
             public JsonContext(string json)
             {

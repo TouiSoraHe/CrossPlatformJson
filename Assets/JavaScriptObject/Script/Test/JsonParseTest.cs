@@ -1,9 +1,9 @@
-﻿namespace CrossPlatformJson
-{
-    using UnityEngine;
-    using UnityEngine.Assertions;
+﻿using UnityEngine;
+using UnityEngine.Assertions;
 
-    public class JsonParseTest:MonoBehaviour
+namespace CrossPlatformJson
+{
+    public class JsonParseTest : MonoBehaviour
     {
         private void Awake()
         {
@@ -35,39 +35,39 @@
             TestParseMissCommaOrCurlyBracket();
         }
 
-        static JavaScriptObject BaseTest(string json,JsonParse.ParseResult expectResult)
+        private static JavaScriptObject BaseTest(string json, JsonParse.ParseResult expectResult)
         {
             JavaScriptObject jsonObj;
-            JsonParse.ParseResult result = JsonParse.Parse(json, out jsonObj);
-            Assert.IsTrue(result == expectResult,"期望:"+ expectResult+",实际:"+result);
+            var result = JsonParse.Parse(json, out jsonObj);
+            Assert.IsTrue(result == expectResult, "期望:" + expectResult + ",实际:" + result);
             return jsonObj;
         }
 
-        static void TestParseNull()
+        private static void TestParseNull()
         {
             Assert.IsTrue(BaseTest("null", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Null);
             Assert.IsTrue(BaseTest(" \nnull\n ", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Null);
         }
 
-        static void TestParseTrue()
+        private static void TestParseTrue()
         {
-            Assert.IsTrue(BaseTest("true", JsonParse.ParseResult.OK).GetBoolean() == true);
-            Assert.IsTrue(BaseTest("  \t\rtrue\t\t", JsonParse.ParseResult.OK).GetBoolean() == true);
+            Assert.IsTrue(BaseTest("true", JsonParse.ParseResult.OK).GetBoolean());
+            Assert.IsTrue(BaseTest("  \t\rtrue\t\t", JsonParse.ParseResult.OK).GetBoolean());
         }
 
-        static void TestParseFalse()
+        private static void TestParseFalse()
         {
             Assert.IsTrue(BaseTest("false", JsonParse.ParseResult.OK).GetBoolean() == false);
             Assert.IsTrue(BaseTest("  \t\rfalse\t\t", JsonParse.ParseResult.OK).GetBoolean() == false);
         }
 
-        static void TestParseExpectValue()
+        private static void TestParseExpectValue()
         {
             Assert.IsTrue(BaseTest("", JsonParse.ParseResult.EXPECT_VALUE) == null);
             Assert.IsTrue(BaseTest(" ", JsonParse.ParseResult.EXPECT_VALUE) == null);
         }
 
-        static void TestParseInvalidValue()
+        private static void TestParseInvalidValue()
         {
             Assert.IsTrue(BaseTest("nul", JsonParse.ParseResult.INVALID_VALUE) == null);
             Assert.IsTrue(BaseTest("?", JsonParse.ParseResult.INVALID_VALUE) == null);
@@ -82,7 +82,7 @@
             Assert.IsTrue(BaseTest("nan", JsonParse.ParseResult.INVALID_VALUE) == null);
         }
 
-        static void TestParseRootNotSingular()
+        private static void TestParseRootNotSingular()
         {
             Assert.IsTrue(BaseTest("null x", JsonParse.ParseResult.ROOT_NOT_SINGULAR) == null);
 
@@ -92,12 +92,12 @@
             Assert.IsTrue(BaseTest("0x123", JsonParse.ParseResult.ROOT_NOT_SINGULAR) == null);
         }
 
-        static void TestNumber(double number,string json)
+        private static void TestNumber(double number, string json)
         {
             Assert.IsTrue(BaseTest(json, JsonParse.ParseResult.OK).GetNumber() == number);
         }
 
-        static void TestParseNumber()
+        private static void TestParseNumber()
         {
             TestNumber(0.0, "0");
             TestNumber(0.0, "-0");
@@ -119,29 +119,29 @@
             TestNumber(1.234E-10, "1.234E-10");
             TestNumber(0.0, "1e-10000");
 
-            TestNumber(1.0000000000000002, "1.0000000000000002"); 
-            TestNumber(4.9406564584124654e-324, "4.9406564584124654e-324"); 
+            TestNumber(1.0000000000000002, "1.0000000000000002");
+            TestNumber(4.9406564584124654e-324, "4.9406564584124654e-324");
             TestNumber(-4.9406564584124654e-324, "-4.9406564584124654e-324");
-            TestNumber(2.2250738585072009e-308, "2.2250738585072009e-308");  
+            TestNumber(2.2250738585072009e-308, "2.2250738585072009e-308");
             TestNumber(-2.2250738585072009e-308, "-2.2250738585072009e-308");
-            TestNumber(2.2250738585072014e-308, "2.2250738585072014e-308");  
+            TestNumber(2.2250738585072014e-308, "2.2250738585072014e-308");
             TestNumber(-2.2250738585072014e-308, "-2.2250738585072014e-308");
-            TestNumber(1.7976931348623157e+308, "1.7976931348623157e+308");  
+            TestNumber(1.7976931348623157e+308, "1.7976931348623157e+308");
             TestNumber(-1.7976931348623157e+308, "-1.7976931348623157e+308");
         }
 
-        static void TestParseNumberTooBig()
+        private static void TestParseNumberTooBig()
         {
             Assert.IsTrue(BaseTest("1e309", JsonParse.ParseResult.NUMBER_TOO_BIG) == null);
             Assert.IsTrue(BaseTest("-1e309", JsonParse.ParseResult.NUMBER_TOO_BIG) == null);
         }
 
-        static void TestString(string value, string json)
+        private static void TestString(string value, string json)
         {
             Assert.IsTrue(BaseTest(json, JsonParse.ParseResult.OK).GetString() == value);
         }
 
-        static void TestParseString()
+        private static void TestParseString()
         {
             TestString("", "\"\"");
             TestString("Hello", "\"Hello\"");
@@ -151,20 +151,20 @@
             TestString("\u52B2", "\"\\u52B2\"");
             TestString("劲", "\"\\u52B2\"");
             TestString("Hello\0World", "\"Hello\\u0000World\"");
-            TestString("\u0024", "\"\\u0024\"");         
-            TestString("\u00a2", "\"\\u00A2\"");     
-            TestString("\u20AC", "\"\\u20AC\""); 
+            TestString("\u0024", "\"\\u0024\"");
+            TestString("\u00a2", "\"\\u00A2\"");
+            TestString("\u20AC", "\"\\u20AC\"");
             TestString("\uD834\uDD1E", "\"\\uD834\\uDD1E\"");
             TestString("\ud834\udd1e", "\"\\ud834\\udd1e\"");
         }
 
-        static void TestParseMissingQuotationMark()
+        private static void TestParseMissingQuotationMark()
         {
             Assert.IsTrue(BaseTest("\"", JsonParse.ParseResult.MISS_QUOTATION_MARK) == null);
             Assert.IsTrue(BaseTest("\"abc", JsonParse.ParseResult.MISS_QUOTATION_MARK) == null);
         }
 
-        static void TestParseInvalidStringEscape()
+        private static void TestParseInvalidStringEscape()
         {
             Assert.IsTrue(BaseTest("\"", JsonParse.ParseResult.MISS_QUOTATION_MARK) == null);
 
@@ -175,18 +175,18 @@
             Assert.IsTrue(BaseTest("\"\\x12\"", JsonParse.ParseResult.INVALID_STRING_ESCAPE) == null);
         }
 
-        static void TestParseInvalidStringChar()
+        private static void TestParseInvalidStringChar()
         {
             Assert.IsTrue(BaseTest("\"\x01\"", JsonParse.ParseResult.INVALID_STRING_CHAR) == null);
             Assert.IsTrue(BaseTest("\"\x1F\"", JsonParse.ParseResult.INVALID_STRING_CHAR) == null);
         }
 
-        static void TestParseInvalidUnicodeHex()
+        private static void TestParseInvalidUnicodeHex()
         {
-            Assert.IsTrue(BaseTest("\"\\u\""    , JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
-            Assert.IsTrue(BaseTest("\"\\u0\""   , JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
-            Assert.IsTrue(BaseTest("\"\\u01\""  , JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
-            Assert.IsTrue(BaseTest("\"\\u012\"" , JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
+            Assert.IsTrue(BaseTest("\"\\u\"", JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
+            Assert.IsTrue(BaseTest("\"\\u0\"", JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
+            Assert.IsTrue(BaseTest("\"\\u01\"", JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
+            Assert.IsTrue(BaseTest("\"\\u012\"", JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
             Assert.IsTrue(BaseTest("\"\\u/000\"", JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
             Assert.IsTrue(BaseTest("\"\\uG000\"", JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
             Assert.IsTrue(BaseTest("\"\\u0/00\"", JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
@@ -197,105 +197,90 @@
             Assert.IsTrue(BaseTest("\"\\u000G\"", JsonParse.ParseResult.INVALID_UNICODE_HEX) == null);
         }
 
-        static void TestParseInvalidUnicodeSurrogate()
+        private static void TestParseInvalidUnicodeSurrogate()
         {
-            Assert.IsTrue(BaseTest("\"\\uD800\""       , JsonParse.ParseResult.INVALID_UNICODE_SURROGATE) == null);
-            Assert.IsTrue(BaseTest("\"\\uDBFF\""       , JsonParse.ParseResult.INVALID_UNICODE_SURROGATE) == null);
-            Assert.IsTrue(BaseTest("\"\\uD800\\\\\""   , JsonParse.ParseResult.INVALID_UNICODE_SURROGATE) == null);
+            Assert.IsTrue(BaseTest("\"\\uD800\"", JsonParse.ParseResult.INVALID_UNICODE_SURROGATE) == null);
+            Assert.IsTrue(BaseTest("\"\\uDBFF\"", JsonParse.ParseResult.INVALID_UNICODE_SURROGATE) == null);
+            Assert.IsTrue(BaseTest("\"\\uD800\\\\\"", JsonParse.ParseResult.INVALID_UNICODE_SURROGATE) == null);
             Assert.IsTrue(BaseTest("\"\\uD800\\uDBFF\"", JsonParse.ParseResult.INVALID_UNICODE_SURROGATE) == null);
             Assert.IsTrue(BaseTest("\"\\uD800\\uE000\"", JsonParse.ParseResult.INVALID_UNICODE_SURROGATE) == null);
         }
 
-        static void TestParseArray()
+        private static void TestParseArray()
         {
             Assert.IsTrue(BaseTest("[ ]", JsonParse.ParseResult.OK).Count == 0);
             Assert.IsTrue(BaseTest("[ ]", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Array);
 
-            JavaScriptObject jsonObj = BaseTest("[ null , false , true , 123 , \"abc\" ]", JsonParse.ParseResult.OK);
+            var jsonObj = BaseTest("[ null , false , true , 123 , \"abc\" ]", JsonParse.ParseResult.OK);
             Assert.IsTrue(jsonObj[0].Type == JavaScriptObjectType.Null);
             Assert.IsTrue(jsonObj[1].GetBoolean() == false);
-            Assert.IsTrue(jsonObj[2].GetBoolean() == true);
+            Assert.IsTrue(jsonObj[2].GetBoolean());
             Assert.IsTrue(jsonObj[3].GetNumber() == 123);
             Assert.IsTrue(jsonObj[4].GetString() == "abc");
 
             jsonObj = BaseTest("[ [ ] , [ 0 ] , [ 0 , 1 ] , [ 0 , 1 , 2 ] ]", JsonParse.ParseResult.OK);
             foreach (var item in jsonObj)
-            {
-                foreach (var v in item.Value)
-                {
-                    Assert.IsTrue(v.Key.GetNumber() == v.Value.GetNumber());
-                }
-            }
+            foreach (var v in item.Value)
+                Assert.IsTrue(v.Key.GetNumber() == v.Value.GetNumber());
         }
 
-        static void TestParseMissCommaOrSquareBracket()
+        private static void TestParseMissCommaOrSquareBracket()
         {
-            Assert.IsTrue(BaseTest("[1"  , JsonParse.ParseResult.MISS_COMMA_OR_SQUARE_BRACKET) == null);
-            Assert.IsTrue(BaseTest("[1}" , JsonParse.ParseResult.MISS_COMMA_OR_SQUARE_BRACKET) == null);
+            Assert.IsTrue(BaseTest("[1", JsonParse.ParseResult.MISS_COMMA_OR_SQUARE_BRACKET) == null);
+            Assert.IsTrue(BaseTest("[1}", JsonParse.ParseResult.MISS_COMMA_OR_SQUARE_BRACKET) == null);
             Assert.IsTrue(BaseTest("[1 2", JsonParse.ParseResult.MISS_COMMA_OR_SQUARE_BRACKET) == null);
             Assert.IsTrue(BaseTest("[[]", JsonParse.ParseResult.MISS_COMMA_OR_SQUARE_BRACKET) == null);
         }
 
-        static void TestParseObject()
+        private static void TestParseObject()
         {
             Assert.IsTrue(BaseTest(" { } ", JsonParse.ParseResult.OK).Count == 0);
             Assert.IsTrue(BaseTest(" { } ", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Object);
 
-            JavaScriptObject jsonObj = BaseTest(
+            var jsonObj = BaseTest(
                 " { " +
-
                 "\"n\" : null , " +
-
                 "\"f\" : false , " +
-
                 "\"t\" : true , " +
-
                 "\"i\" : 123 , " +
-
                 "\"s\" : \"abc\", " +
-
                 "\"a\" : [ 1, 2, 3 ]," +
-
                 "\"o\" : { \"1\" : 1, \"2\" : 2, \"3\" : 3 }" +
-
                 " } "
                 , JsonParse.ParseResult.OK);
             Assert.IsTrue(jsonObj["n"].Type == JavaScriptObjectType.Null);
             Assert.IsTrue(jsonObj["f"].GetBoolean() == false);
-            Assert.IsTrue(jsonObj["t"].GetBoolean() == true);
+            Assert.IsTrue(jsonObj["t"].GetBoolean());
             Assert.IsTrue(jsonObj["i"].GetNumber() == 123);
             Assert.IsTrue(jsonObj["s"].GetString() == "abc");
             foreach (var item in jsonObj["o"])
-            {
                 Assert.IsTrue(item.Key.GetString().Equals(item.Value.GetNumber().ToString()));
-            }
         }
 
-        static void TestParseMissKey()
+        private static void TestParseMissKey()
         {
-            Assert.IsTrue(BaseTest("{:1,"      , JsonParse.ParseResult.MISS_KEY) == null);
-            Assert.IsTrue(BaseTest("{1:1,"     , JsonParse.ParseResult.MISS_KEY) == null);
-            Assert.IsTrue(BaseTest("{true:1,"  , JsonParse.ParseResult.MISS_KEY) == null);
-            Assert.IsTrue(BaseTest("{false:1," , JsonParse.ParseResult.MISS_KEY) == null);
-            Assert.IsTrue(BaseTest("{null:1,"  , JsonParse.ParseResult.MISS_KEY) == null);
-            Assert.IsTrue(BaseTest("{[]:1,"    , JsonParse.ParseResult.MISS_KEY) == null);
-            Assert.IsTrue(BaseTest("{{}:1,"    , JsonParse.ParseResult.MISS_KEY) == null);
+            Assert.IsTrue(BaseTest("{:1,", JsonParse.ParseResult.MISS_KEY) == null);
+            Assert.IsTrue(BaseTest("{1:1,", JsonParse.ParseResult.MISS_KEY) == null);
+            Assert.IsTrue(BaseTest("{true:1,", JsonParse.ParseResult.MISS_KEY) == null);
+            Assert.IsTrue(BaseTest("{false:1,", JsonParse.ParseResult.MISS_KEY) == null);
+            Assert.IsTrue(BaseTest("{null:1,", JsonParse.ParseResult.MISS_KEY) == null);
+            Assert.IsTrue(BaseTest("{[]:1,", JsonParse.ParseResult.MISS_KEY) == null);
+            Assert.IsTrue(BaseTest("{{}:1,", JsonParse.ParseResult.MISS_KEY) == null);
             Assert.IsTrue(BaseTest("{\"a\":1,", JsonParse.ParseResult.MISS_KEY) == null);
         }
 
-        static void TestParseMissColon()
+        private static void TestParseMissColon()
         {
             Assert.IsTrue(BaseTest("{\"a\"}", JsonParse.ParseResult.MISS_COLON) == null);
             Assert.IsTrue(BaseTest("{\"a\",\"b\"}", JsonParse.ParseResult.MISS_COLON) == null);
         }
 
-        static void TestParseMissCommaOrCurlyBracket()
+        private static void TestParseMissCommaOrCurlyBracket()
         {
-            Assert.IsTrue(BaseTest("{\"a\":1"      , JsonParse.ParseResult.MISS_COMMA_OR_CURLY_BRACKET) == null);
-            Assert.IsTrue(BaseTest("{\"a\":1]"     , JsonParse.ParseResult.MISS_COMMA_OR_CURLY_BRACKET) == null);
+            Assert.IsTrue(BaseTest("{\"a\":1", JsonParse.ParseResult.MISS_COMMA_OR_CURLY_BRACKET) == null);
+            Assert.IsTrue(BaseTest("{\"a\":1]", JsonParse.ParseResult.MISS_COMMA_OR_CURLY_BRACKET) == null);
             Assert.IsTrue(BaseTest("{\"a\":1 \"b\"", JsonParse.ParseResult.MISS_COMMA_OR_CURLY_BRACKET) == null);
             Assert.IsTrue(BaseTest("{\"a\":{}", JsonParse.ParseResult.MISS_COMMA_OR_CURLY_BRACKET) == null);
         }
-
     }
 }

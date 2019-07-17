@@ -1,6 +1,5 @@
 ﻿namespace CrossPlatformJson
 {
-
     public class JavaScriptObjectWithJsonParse : IJsonString2JavaScriptObjectHandle
     {
         public JavaScriptObject ToJavaScriptObject(string json)

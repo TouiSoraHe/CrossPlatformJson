@@ -1,15 +1,11 @@
-﻿namespace CrossPlatformJson
-{
-    using LitJson;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+namespace CrossPlatformJson
+{
     public class JavaScriptObjectTest : MonoBehaviour
     {
-
-        string json = null;
+        private string json;
 
         private void Awake()
         {
@@ -20,41 +16,37 @@
         private void Start()
         {
             //耗时测试
-            double parseJson = TimeTest(() =>
+            var parseJson = TimeTest(() =>
             {
-                for (int i = 0; i < 1000; i++)
-                {
-                    JavaScriptObjectFactory.CreateJavaScriptObject(json, true);
-                }
+                for (var i = 0; i < 1000; i++) JavaScriptObjectFactory.CreateJavaScriptObject(json);
             });
-            Debug.Log("parseJson:"+parseJson);
-            double litJson = TimeTest(() =>
+            Debug.Log("parseJson:" + parseJson);
+            var litJson = TimeTest(() =>
             {
-                for (int i = 0; i < 1000; i++)
-                {
-                    LitJson.JsonMapper.ToObject(json);
-                }
+                for (var i = 0; i < 1000; i++) LitJson.JsonMapper.ToObject(json);
             });
             Debug.Log("litJson:" + litJson);
             //打印解析的值
-            Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject(json, true).ToJson());
+            Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject(json).ToJson());
             Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject(json, false).ToJson());
             //将解析的出来的再转成json再解析一次
-            Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject(JavaScriptObjectFactory.CreateJavaScriptObject(json, true).ToJson(), true).ToJson());
-            Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject(JavaScriptObjectFactory.CreateJavaScriptObject(json, false).ToJson(), false).ToJson());
+            Debug.Log(JavaScriptObjectFactory
+                .CreateJavaScriptObject(JavaScriptObjectFactory.CreateJavaScriptObject(json).ToJson()).ToJson());
+            Debug.Log(JavaScriptObjectFactory
+                .CreateJavaScriptObject(JavaScriptObjectFactory.CreateJavaScriptObject(json, false).ToJson(), false)
+                .ToJson());
             //解析单个值的情况
-            Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject("1", true).ToJson());
+            Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject("1").ToJson());
             Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject("1", false).ToJson());
         }
 
-        static double TimeTest(Action action)
+        private static double TimeTest(Action action)
         {
-            DateTime beforDT = System.DateTime.Now;
+            var beforDT = DateTime.Now;
             action();
-            DateTime afterDT = System.DateTime.Now;
-            TimeSpan ts = afterDT.Subtract(beforDT);
+            var afterDT = DateTime.Now;
+            var ts = afterDT.Subtract(beforDT);
             return ts.TotalMilliseconds;
         }
     }
-
 }
