@@ -46,7 +46,11 @@ namespace CrossPlatformJson
         /// <returns></returns>
         public static bool IsEnum(Type type)
         {
+#if !UNITY_WSA || UNITY_EDITOR
             return type.IsEnum;
+#else
+            return type.GetTypeInfo().IsEnum;
+#endif
         }
 
         /// <summary>
@@ -132,10 +136,25 @@ namespace CrossPlatformJson
             foreach (var item in type.GetFields(BindingFlags.NonPublic
                                                 | BindingFlags.Public
                                                 | BindingFlags.Instance))
-                if (item.IsPublic && !Attribute.IsDefined(item, typeof(NonSerializedAttribute))
-                    || Attribute.IsDefined(item, typeof(SerializeField)))
+                if (item.IsPublic && !AttributeIsDefined(item, typeof(NonSerializedAttribute))
+                    || AttributeIsDefined(item, typeof(SerializeField)))
                     fieldInfos.Add(item);
             return fieldInfos;
+        }
+
+        /// <summary>
+        ///     判断指定MemberInfo是否存在指定类型的特性
+        /// </summary>
+        /// <param name="memberInfo"></param>
+        /// <param name="attributeType"></param>
+        /// <returns></returns>
+        public static bool AttributeIsDefined(MemberInfo memberInfo, Type attributeType)
+        {
+#if !UNITY_WSA || UNITY_EDITOR
+            return Attribute.IsDefined(memberInfo, attributeType);
+#else
+            return memberInfo.GetCustomAttribute(attributeType) != null;
+#endif
         }
 
         /// <summary>

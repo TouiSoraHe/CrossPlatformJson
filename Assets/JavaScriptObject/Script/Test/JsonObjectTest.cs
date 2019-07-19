@@ -23,7 +23,9 @@ namespace CrossPlatformJson
             Debug.Log("parseJson:" + parseJson);
             var litJson = TimeTest(() =>
             {
+#if !UNITY_WSA || UNITY_EDITOR
                 for (var i = 0; i < 1000; i++) LitJson.JsonMapper.ToObject(json);
+#endif
             });
             Debug.Log("litJson:" + litJson);
             //打印解析的值

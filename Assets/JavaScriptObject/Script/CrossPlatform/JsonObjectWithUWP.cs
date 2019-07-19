@@ -1,18 +1,20 @@
-﻿using System;
-
+﻿
 namespace CrossPlatformJson
 {
 #if UNITY_UWP
+    using System;
+    using Windows.Data.Json;
+
     public class JsonObjectWithUWP : IJsonString2JsonObjectHandle
     {
         public JsonObject ToJsonObject(string json)
         {
             JsonObject jsonObj = null;
             IJsonValue jsonData = null;
-            JsonObject jsonObject;
+            Windows.Data.Json.JsonObject jsonObject;
             JsonValue jsonValue;
             JsonArray jsonArray;
-            if (JsonObject.TryParse(json, out jsonObject))
+            if (Windows.Data.Json.JsonObject.TryParse(json, out jsonObject))
                 jsonData = jsonObject;
             else if (JsonArray.TryParse(json, out jsonArray))
                 jsonData = jsonArray;
@@ -41,11 +43,11 @@ namespace CrossPlatformJson
                     jsonObj = new JsonObject(jsonData.GetString());
                     break;
                 case JsonValueType.Array:
-                    jsonObj = new JsonObject(JsonObject.JsonObjectType.Array);
+                    jsonObj = new JsonObject(JsonObjectType.Array);
                     ProcessArray(jsonObj, jsonData.GetArray());
                     break;
                 case JsonValueType.Object:
-                    jsonObj = new JsonObject(JsonObject.JsonObjectType.Object);
+                    jsonObj = new JsonObject(JsonObjectType.Object);
                     ProcessObject(jsonObj, jsonData.GetObject());
                     break;
                 default:
@@ -53,7 +55,7 @@ namespace CrossPlatformJson
             }
         }
 
-        private void ProcessObject(JsonObject jsonObj, JsonObject jsonData)
+        private void ProcessObject(JsonObject jsonObj, Windows.Data.Json.JsonObject jsonData)
         {
             foreach (var item in jsonData)
             {

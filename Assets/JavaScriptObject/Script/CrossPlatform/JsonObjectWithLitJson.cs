@@ -1,9 +1,9 @@
-﻿using System;
-using LitJson;
-
-namespace CrossPlatformJson
+﻿namespace CrossPlatformJson
 {
 #if UNITY_STANDALONE_WIN || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR
+    using System;
+    using LitJson;
+    
     public class JsonObjectWithLitJson : IJsonString2JsonObjectHandle
     {
         public JsonObject ToJsonObject(string json)
