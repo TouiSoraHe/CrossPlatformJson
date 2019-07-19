@@ -298,7 +298,12 @@ namespace CrossPlatformJson
                 throw new Exception("该对象不是一个布尔值类型");
         }
 
-        public string ToJson()
+        /// <summary>
+        /// 将JsonObject转换为json
+        /// </summary>
+        /// <param name="digit">设定转换数字的时候保留几位小数,默认为null</param>
+        /// <returns></returns>
+        public string ToJson(uint? digit = null)
         {
             switch (Type)
             {
@@ -307,6 +312,11 @@ namespace CrossPlatformJson
                 case JsonObjectType.Boolean:
                     return GetBoolean() ? "true" : "false";
                 case JsonObjectType.Number:
+                    if (digit != null)
+                    {
+                        ulong multiple = (ulong)Math.Pow(10, digit.Value);
+                        return (Math.Floor(GetNumber() * multiple) / multiple).ToString();
+                    }
                     return GetNumber().ToString();
                 case JsonObjectType.String:
                     return StringifyString(GetString());
@@ -411,6 +421,48 @@ namespace CrossPlatformJson
         public override string ToString()
         {
             return ToJson();
+        }
+
+        /// <summary>
+        /// 比较两个JsonObject是否一样,对于小数,该方法将忽略指定精度后的值,默认精度为6
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj, 6);
+        }
+
+        public bool Equals(object obj, int digit)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((JsonObject)obj, digit);
+        }
+
+        protected bool Equals(JsonObject other, int digit)
+        {
+            return
+                _type == other._type
+                && (_type == JsonObjectType.Number
+                    ? Math.Abs(GetNumber() - other.GetNumber()) < Math.Pow(10, digit * -1) ||
+                      GetNumber().ToString().Equals(other.GetNumber().ToString())
+                    : Equals(_baseValue, other._baseValue))
+                && CollectionUtility.CompareX(_arrayValue, other._arrayValue)
+                && CollectionUtility.CompareX(_objectValue, other._objectValue);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = _arrayValue != null ? _arrayValue.GetHashCode() : 0;
+                hashCode = (hashCode * 397) ^ (_baseValue != null ? _baseValue.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (_objectValue != null ? _objectValue.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (int)_type;
+                return hashCode;
+            }
         }
     }
 
