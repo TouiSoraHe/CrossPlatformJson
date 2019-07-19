@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CrossPlatformJson
 {
-    public class JavaScriptObject : IEnumerable<KeyValuePair<JavaScriptObject, JavaScriptObject>>
+    public class JsonObject : IEnumerable<KeyValuePair<JsonObject, JsonObject>>
     {
         private static readonly char[] hexDigits =
             {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
@@ -13,7 +13,7 @@ namespace CrossPlatformJson
         /// <summary>
         ///     用来存放数组
         /// </summary>
-        private List<JavaScriptObject> _arrayValue;
+        private List<JsonObject> _arrayValue;
 
         /// <summary>
         ///     用来存放基本数据类型
@@ -23,71 +23,71 @@ namespace CrossPlatformJson
         /// <summary>
         ///     用来存放对象
         /// </summary>
-        private Dictionary<string, JavaScriptObject> _objectValue;
+        private Dictionary<string, JsonObject> _objectValue;
 
         /// <summary>
         ///     类型
         /// </summary>
-        private JavaScriptObjectType _type;
+        private JsonObjectType _type;
 
-        public JavaScriptObject(double value)
+        public JsonObject(double value)
         {
-            Type = JavaScriptObjectType.Number;
+            Type = JsonObjectType.Number;
             _baseValue = value;
         }
 
-        public JavaScriptObject(string value)
+        public JsonObject(string value)
         {
-            Type = JavaScriptObjectType.String;
+            Type = JsonObjectType.String;
             _baseValue = value;
         }
 
-        public JavaScriptObject(char value)
+        public JsonObject(char value)
         {
-            Type = JavaScriptObjectType.String;
+            Type = JsonObjectType.String;
             _baseValue = new string(value, 1);
         }
 
-        public JavaScriptObject(bool value)
+        public JsonObject(bool value)
         {
-            Type = JavaScriptObjectType.Boolean;
+            Type = JsonObjectType.Boolean;
             _baseValue = value;
         }
 
-        public JavaScriptObject(JavaScriptObjectType type = JavaScriptObjectType.Null)
+        public JsonObject(JsonObjectType type = JsonObjectType.Null)
         {
             Type = type;
-            if (Type == JavaScriptObjectType.Object)
-                _objectValue = new Dictionary<string, JavaScriptObject>();
-            else if (Type == JavaScriptObjectType.Array) _arrayValue = new List<JavaScriptObject>();
+            if (Type == JsonObjectType.Object)
+                _objectValue = new Dictionary<string, JsonObject>();
+            else if (Type == JsonObjectType.Array) _arrayValue = new List<JsonObject>();
         }
 
-        public JavaScriptObject this[int index]
+        public JsonObject this[int index]
         {
             get
             {
-                if (Type != JavaScriptObjectType.Array) throw new Exception("该对象不是一个数组类型");
+                if (Type != JsonObjectType.Array) throw new Exception("该对象不是一个数组类型");
                 return _arrayValue[index];
             }
 
             set
             {
-                if (Type != JavaScriptObjectType.Array) throw new Exception("该对象不是一个数组类型");
+                if (Type != JsonObjectType.Array) throw new Exception("该对象不是一个数组类型");
                 _arrayValue[index] = value;
             }
         }
 
-        public JavaScriptObject this[string key]
+        public JsonObject this[string key]
         {
             get
             {
-                if (Type != JavaScriptObjectType.Object) throw new Exception("该对象不是一个对象类型");
+                if (Type != JsonObjectType.Object) throw new Exception("该对象不是一个对象类型");
                 return _objectValue[key];
             }
 
             set
             {
-                if (Type != JavaScriptObjectType.Object) throw new Exception("该对象不是一个对象类型");
+                if (Type != JsonObjectType.Object) throw new Exception("该对象不是一个对象类型");
                 _objectValue[key] = value;
             }
         }
@@ -101,17 +101,17 @@ namespace CrossPlatformJson
             {
                 switch (Type)
                 {
-                    case JavaScriptObjectType.Null:
+                    case JsonObjectType.Null:
                         return 0;
-                    case JavaScriptObjectType.Boolean:
+                    case JsonObjectType.Boolean:
                         return 1;
-                    case JavaScriptObjectType.Number:
+                    case JsonObjectType.Number:
                         return 1;
-                    case JavaScriptObjectType.String:
+                    case JsonObjectType.String:
                         return 1;
-                    case JavaScriptObjectType.Array:
+                    case JsonObjectType.Array:
                         return _arrayValue.Count;
-                    case JavaScriptObjectType.Object:
+                    case JsonObjectType.Object:
                         return _objectValue.Count;
                     default:
                         return -1;
@@ -119,22 +119,22 @@ namespace CrossPlatformJson
             }
         }
 
-        public JavaScriptObjectType Type
+        public JsonObjectType Type
         {
             get { return _type; }
 
             private set { _type = value; }
         }
 
-        public IEnumerator<KeyValuePair<JavaScriptObject, JavaScriptObject>> GetEnumerator()
+        public IEnumerator<KeyValuePair<JsonObject, JsonObject>> GetEnumerator()
         {
-            if (_type == JavaScriptObjectType.Object)
+            if (_type == JsonObjectType.Object)
                 foreach (var item in _objectValue)
-                    yield return new KeyValuePair<JavaScriptObject, JavaScriptObject>(new JavaScriptObject(item.Key),
+                    yield return new KeyValuePair<JsonObject, JsonObject>(new JsonObject(item.Key),
                         item.Value);
-            else if (_type == JavaScriptObjectType.Array)
+            else if (_type == JsonObjectType.Array)
                 for (var i = 0; i < _arrayValue.Count; i++)
-                    yield return new KeyValuePair<JavaScriptObject, JavaScriptObject>(new JavaScriptObject(i),
+                    yield return new KeyValuePair<JsonObject, JsonObject>(new JsonObject(i),
                         _arrayValue[i]);
             else
                 throw new NotImplementedException("迭代器只对数组或对象类型有效");
@@ -147,92 +147,92 @@ namespace CrossPlatformJson
 
         public double GetNumber()
         {
-            if (Type == JavaScriptObjectType.Number)
+            if (Type == JsonObjectType.Number)
                 return (double) _baseValue;
             throw new Exception("该对象不是一个数值类型");
         }
 
         public string GetString()
         {
-            if (Type == JavaScriptObjectType.String)
+            if (Type == JsonObjectType.String)
                 return (string) _baseValue;
             throw new Exception("该对象不是一个字符串类型");
         }
 
         public bool GetBoolean()
         {
-            if (Type == JavaScriptObjectType.Boolean)
+            if (Type == JsonObjectType.Boolean)
                 return (bool) _baseValue;
             throw new Exception("该对象不是一个布尔值类型");
         }
 
-        public void Add(JavaScriptObject value)
+        public void Add(JsonObject value)
         {
-            if (Type == JavaScriptObjectType.Null)
+            if (Type == JsonObjectType.Null)
             {
-                Type = JavaScriptObjectType.Array;
-                _arrayValue = new List<JavaScriptObject>();
+                Type = JsonObjectType.Array;
+                _arrayValue = new List<JsonObject>();
             }
 
-            if (Type != JavaScriptObjectType.Array) throw new Exception("该对象不是一个数组类型");
+            if (Type != JsonObjectType.Array) throw new Exception("该对象不是一个数组类型");
             _arrayValue.Add(value);
         }
 
         public void Add(double value)
         {
-            Add(new JavaScriptObject(value));
+            Add(new JsonObject(value));
         }
 
         public void Add(string value)
         {
-            Add(new JavaScriptObject(value));
+            Add(new JsonObject(value));
         }
 
         public void Add(char value)
         {
-            Add(new JavaScriptObject(value));
+            Add(new JsonObject(value));
         }
 
         public void Add(bool value)
         {
-            Add(new JavaScriptObject(value));
+            Add(new JsonObject(value));
         }
 
-        public void Add(string key, JavaScriptObject value)
+        public void Add(string key, JsonObject value)
         {
-            if (Type == JavaScriptObjectType.Null)
+            if (Type == JsonObjectType.Null)
             {
-                Type = JavaScriptObjectType.Object;
-                _objectValue = new Dictionary<string, JavaScriptObject>();
+                Type = JsonObjectType.Object;
+                _objectValue = new Dictionary<string, JsonObject>();
             }
 
-            if (Type != JavaScriptObjectType.Object) throw new Exception("该对象不是一个对象类型");
+            if (Type != JsonObjectType.Object) throw new Exception("该对象不是一个对象类型");
             _objectValue.Add(key, value);
         }
 
         public void Add(string key, double value)
         {
-            Add(key, new JavaScriptObject(value));
+            Add(key, new JsonObject(value));
         }
 
         public void Add(string key, string value)
         {
-            Add(key, new JavaScriptObject(value));
+            Add(key, new JsonObject(value));
         }
 
         public void Add(string key, char value)
         {
-            Add(key, new JavaScriptObject(value));
+            Add(key, new JsonObject(value));
         }
 
         public void Add(string key, bool value)
         {
-            Add(key, new JavaScriptObject(value));
+            Add(key, new JsonObject(value));
         }
 
         public void Remove(int index)
         {
-            if (Type != JavaScriptObjectType.Array) throw new Exception("该对象不是一个数组类型");
+            if (Type != JsonObjectType.Array) throw new Exception("该对象不是一个数组类型");
             _arrayValue.RemoveAt(index);
         }
 
@@ -242,7 +242,7 @@ namespace CrossPlatformJson
         /// <param name="key">需要移除的字段名</param>
         public void Remove(string key)
         {
-            if (Type != JavaScriptObjectType.Object) throw new Exception("该对象不是一个对象类型");
+            if (Type != JsonObjectType.Object) throw new Exception("该对象不是一个对象类型");
             _objectValue.Remove(key);
         }
 
@@ -253,7 +253,7 @@ namespace CrossPlatformJson
         /// <returns></returns>
         public bool ContainsKey(string key)
         {
-            if (Type != JavaScriptObjectType.Object) throw new Exception("该对象不是一个对象类型");
+            if (Type != JsonObjectType.Object) throw new Exception("该对象不是一个对象类型");
             return _objectValue.ContainsKey(key);
         }
 
@@ -268,8 +268,8 @@ namespace CrossPlatformJson
 
         public void SetNumber(double value)
         {
-            if (Type == JavaScriptObjectType.Null) Type = JavaScriptObjectType.Number;
-            if (Type == JavaScriptObjectType.Number)
+            if (Type == JsonObjectType.Null) Type = JsonObjectType.Number;
+            if (Type == JsonObjectType.Number)
                 _baseValue = value;
             else
                 throw new Exception("该对象不是一个数值类型");
@@ -277,8 +277,8 @@ namespace CrossPlatformJson
 
         public void SetString(string value)
         {
-            if (Type == JavaScriptObjectType.Null) Type = JavaScriptObjectType.String;
-            if (Type == JavaScriptObjectType.String)
+            if (Type == JsonObjectType.Null) Type = JsonObjectType.String;
+            if (Type == JsonObjectType.String)
                 _baseValue = value;
             else
                 throw new Exception("该对象不是一个字符串类型");
@@ -291,8 +291,8 @@ namespace CrossPlatformJson
 
         public void SetBoolean(bool value)
         {
-            if (Type == JavaScriptObjectType.Null) Type = JavaScriptObjectType.Boolean;
-            if (Type == JavaScriptObjectType.Boolean)
+            if (Type == JsonObjectType.Null) Type = JsonObjectType.Boolean;
+            if (Type == JsonObjectType.Boolean)
                 _baseValue = value;
             else
                 throw new Exception("该对象不是一个布尔值类型");
@@ -302,15 +302,15 @@ namespace CrossPlatformJson
         {
             switch (Type)
             {
-                case JavaScriptObjectType.Null:
+                case JsonObjectType.Null:
                     return "null";
-                case JavaScriptObjectType.Boolean:
+                case JsonObjectType.Boolean:
                     return GetBoolean() ? "true" : "false";
-                case JavaScriptObjectType.Number:
+                case JsonObjectType.Number:
                     return GetNumber().ToString();
-                case JavaScriptObjectType.String:
+                case JsonObjectType.String:
                     return StringifyString(GetString());
-                case JavaScriptObjectType.Array:
+                case JsonObjectType.Array:
                 {
                     var ret = new StringBuilder();
                     ret.Append("[");
@@ -324,7 +324,7 @@ namespace CrossPlatformJson
                     return ret.ToString();
                 }
 
-                case JavaScriptObjectType.Object:
+                case JsonObjectType.Object:
                 {
                     var ret = new StringBuilder();
                     ret.Append("{");
@@ -415,9 +415,9 @@ namespace CrossPlatformJson
     }
 
     /// <summary>
-    ///     JavaScriptObject的类型
+    ///     JsonObject的类型
     /// </summary>
-    public enum JavaScriptObjectType
+    public enum JsonObjectType
     {
         Null = 0,
         Boolean = 1,

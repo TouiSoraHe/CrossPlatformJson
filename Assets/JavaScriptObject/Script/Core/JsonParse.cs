@@ -79,16 +79,16 @@ namespace CrossPlatformJson
             MISS_COMMA_OR_CURLY_BRACKET
         }
 
-        public static JavaScriptObject Parse(string json)
+        public static JsonObject Parse(string json)
         {
             if (string.IsNullOrEmpty(json)) throw new Exception("json字符串为空");
-            JavaScriptObject jsonObj;
+            JsonObject jsonObj;
             var result = Parse(json, out jsonObj);
             if (result != ParseResult.OK) Debug.LogError("json:" + json + "解析失败:" + result);
             return jsonObj;
         }
 
-        public static ParseResult Parse(string json, out JavaScriptObject jsonObj)
+        public static ParseResult Parse(string json, out JsonObject jsonObj)
         {
             var jsonContext = new JsonContext(json);
             ParseWhitespace(jsonContext);
@@ -112,14 +112,14 @@ namespace CrossPlatformJson
                 c++;
         }
 
-        private static ParseResult ParseValue(JsonContext c, out JavaScriptObject v)
+        private static ParseResult ParseValue(JsonContext c, out JsonObject v)
         {
             v = null;
             switch (c[c.index])
             {
-                case 'n': return ParseLiteral(c, "null", out v, new JavaScriptObject());
-                case 't': return ParseLiteral(c, "true", out v, new JavaScriptObject(true));
-                case 'f': return ParseLiteral(c, "false", out v, new JavaScriptObject(false));
+                case 'n': return ParseLiteral(c, "null", out v, new JsonObject());
+                case 't': return ParseLiteral(c, "true", out v, new JsonObject(true));
+                case 'f': return ParseLiteral(c, "false", out v, new JsonObject(false));
                 case '\0': return ParseResult.EXPECT_VALUE;
                 case '"': return ParseString(c, out v);
                 case '[': return ParseArray(c, out v);
@@ -128,8 +128,8 @@ namespace CrossPlatformJson
             }
         }
 
-        private static ParseResult ParseLiteral(JsonContext c, string text, out JavaScriptObject value,
-            JavaScriptObject defaultValue)
+        private static ParseResult ParseLiteral(JsonContext c, string text, out JsonObject value,
+            JsonObject defaultValue)
         {
             value = null;
             for (var i = 0; i < text.Length; i++)
@@ -143,7 +143,7 @@ namespace CrossPlatformJson
             return ParseResult.OK;
         }
 
-        private static ParseResult ParseNumber(JsonContext c, out JavaScriptObject v)
+        private static ParseResult ParseNumber(JsonContext c, out JsonObject v)
         {
             v = null;
             var index = c.index;
@@ -175,7 +175,7 @@ namespace CrossPlatformJson
 
             try
             {
-                v = new JavaScriptObject(Convert.ToDouble(c.Substring(c.index, index - c.index)));
+                v = new JsonObject(Convert.ToDouble(c.Substring(c.index, index - c.index)));
             }
             catch (OverflowException)
             {
@@ -196,7 +196,7 @@ namespace CrossPlatformJson
             return ch >= '1' && ch <= '9';
         }
 
-        private static ParseResult ParseString(JsonContext c, out JavaScriptObject v)
+        private static ParseResult ParseString(JsonContext c, out JsonObject v)
         {
             v = null;
             c++;
@@ -207,7 +207,7 @@ namespace CrossPlatformJson
                 switch (ch)
                 {
                     case '\"':
-                        v = new JavaScriptObject(str.ToString());
+                        v = new JsonObject(str.ToString());
                         return ParseResult.OK;
                     case '\\':
                         var a = c[c.index++];
@@ -289,7 +289,7 @@ namespace CrossPlatformJson
             return true;
         }
 
-        private static ParseResult ParseArray(JsonContext c, out JavaScriptObject v)
+        private static ParseResult ParseArray(JsonContext c, out JsonObject v)
         {
             v = null;
             c++;
@@ -297,14 +297,14 @@ namespace CrossPlatformJson
             if (c[c.index] == ']')
             {
                 c++;
-                v = new JavaScriptObject(JavaScriptObjectType.Array);
+                v = new JsonObject(JsonObjectType.Array);
                 return ParseResult.OK;
             }
 
-            var ret = new JavaScriptObject();
+            var ret = new JsonObject();
             while (true)
             {
-                JavaScriptObject value = null;
+                JsonObject value = null;
                 var result = ParseValue(c, out value);
                 if (result != ParseResult.OK)
                     return result;
@@ -328,7 +328,7 @@ namespace CrossPlatformJson
             }
         }
 
-        private static ParseResult ParseObject(JsonContext c, out JavaScriptObject v)
+        private static ParseResult ParseObject(JsonContext c, out JsonObject v)
         {
             v = null;
             c++;
@@ -336,16 +336,16 @@ namespace CrossPlatformJson
             if (c[c.index] == '}')
             {
                 c++;
-                v = new JavaScriptObject(JavaScriptObjectType.Object);
+                v = new JsonObject(JsonObjectType.Object);
                 return ParseResult.OK;
             }
 
-            var ret = new JavaScriptObject();
+            var ret = new JsonObject();
             for (;;)
             {
                 if (c[c.index] != '"')
                     return ParseResult.MISS_KEY;
-                JavaScriptObject keyObj = null;
+                JsonObject keyObj = null;
                 var keyResult = ParseString(c, out keyObj);
                 if (keyResult != ParseResult.OK)
                     return keyResult;
@@ -354,7 +354,7 @@ namespace CrossPlatformJson
                     return ParseResult.MISS_COLON;
                 c++;
                 ParseWhitespace(c);
-                JavaScriptObject valueObj = null;
+                JsonObject valueObj = null;
                 var valueResult = ParseValue(c, out valueObj);
                 if (valueResult != ParseResult.OK)
                     return valueResult;

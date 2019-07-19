@@ -16,7 +16,7 @@ public class C : A
         };
 
     public D<string> d = new D<string>("这是D");
-    public JavaScriptObjectType enumVlaue = JavaScriptObjectType.Number;
+    public JsonObjectType enumVlaue = JsonObjectType.Number;
     public Dictionary<int, int> intDic = new Dictionary<int, int> {{1, 1}, {2, 2}};
     public int intValue = 10;
 

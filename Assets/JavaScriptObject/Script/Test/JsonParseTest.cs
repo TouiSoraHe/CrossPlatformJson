@@ -35,9 +35,9 @@ namespace CrossPlatformJson
             TestParseMissCommaOrCurlyBracket();
         }
 
-        private static JavaScriptObject BaseTest(string json, JsonParse.ParseResult expectResult)
+        private static JsonObject BaseTest(string json, JsonParse.ParseResult expectResult)
         {
-            JavaScriptObject jsonObj;
+            JsonObject jsonObj;
             var result = JsonParse.Parse(json, out jsonObj);
             Assert.IsTrue(result == expectResult, "期望:" + expectResult + ",实际:" + result);
             return jsonObj;
@@ -45,8 +45,8 @@ namespace CrossPlatformJson
 
         private static void TestParseNull()
         {
-            Assert.IsTrue(BaseTest("null", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Null);
-            Assert.IsTrue(BaseTest(" \nnull\n ", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Null);
+            Assert.IsTrue(BaseTest("null", JsonParse.ParseResult.OK).Type == JsonObjectType.Null);
+            Assert.IsTrue(BaseTest(" \nnull\n ", JsonParse.ParseResult.OK).Type == JsonObjectType.Null);
         }
 
         private static void TestParseTrue()
@@ -209,10 +209,10 @@ namespace CrossPlatformJson
         private static void TestParseArray()
         {
             Assert.IsTrue(BaseTest("[ ]", JsonParse.ParseResult.OK).Count == 0);
-            Assert.IsTrue(BaseTest("[ ]", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Array);
+            Assert.IsTrue(BaseTest("[ ]", JsonParse.ParseResult.OK).Type == JsonObjectType.Array);
 
             var jsonObj = BaseTest("[ null , false , true , 123 , \"abc\" ]", JsonParse.ParseResult.OK);
-            Assert.IsTrue(jsonObj[0].Type == JavaScriptObjectType.Null);
+            Assert.IsTrue(jsonObj[0].Type == JsonObjectType.Null);
             Assert.IsTrue(jsonObj[1].GetBoolean() == false);
             Assert.IsTrue(jsonObj[2].GetBoolean());
             Assert.IsTrue(jsonObj[3].GetNumber() == 123);
@@ -235,7 +235,7 @@ namespace CrossPlatformJson
         private static void TestParseObject()
         {
             Assert.IsTrue(BaseTest(" { } ", JsonParse.ParseResult.OK).Count == 0);
-            Assert.IsTrue(BaseTest(" { } ", JsonParse.ParseResult.OK).Type == JavaScriptObjectType.Object);
+            Assert.IsTrue(BaseTest(" { } ", JsonParse.ParseResult.OK).Type == JsonObjectType.Object);
 
             var jsonObj = BaseTest(
                 " { " +
@@ -248,7 +248,7 @@ namespace CrossPlatformJson
                 "\"o\" : { \"1\" : 1, \"2\" : 2, \"3\" : 3 }" +
                 " } "
                 , JsonParse.ParseResult.OK);
-            Assert.IsTrue(jsonObj["n"].Type == JavaScriptObjectType.Null);
+            Assert.IsTrue(jsonObj["n"].Type == JsonObjectType.Null);
             Assert.IsTrue(jsonObj["f"].GetBoolean() == false);
             Assert.IsTrue(jsonObj["t"].GetBoolean());
             Assert.IsTrue(jsonObj["i"].GetNumber() == 123);

@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace CrossPlatformJson
 {
-    public class JavaScriptObjectTest : MonoBehaviour
+    public class JsonObjectTest : MonoBehaviour
     {
         private string json;
 
         private void Awake()
         {
-            json = Resources.Load<TextAsset>("JavaScriptObject/test").text;
+            json = Resources.Load<TextAsset>("JsonObject/test").text;
             Debug.Log(json);
         }
 
@@ -18,7 +18,7 @@ namespace CrossPlatformJson
             //耗时测试
             var parseJson = TimeTest(() =>
             {
-                for (var i = 0; i < 1000; i++) JavaScriptObjectFactory.CreateJavaScriptObject(json);
+                for (var i = 0; i < 1000; i++) JsonObjectFactory.CreateJsonObject(json);
             });
             Debug.Log("parseJson:" + parseJson);
             var litJson = TimeTest(() =>
@@ -27,17 +27,17 @@ namespace CrossPlatformJson
             });
             Debug.Log("litJson:" + litJson);
             //打印解析的值
-            Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject(json).ToJson());
-            Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject(json, false).ToJson());
+            Debug.Log(JsonObjectFactory.CreateJsonObject(json).ToJson());
+            Debug.Log(JsonObjectFactory.CreateJsonObject(json, false).ToJson());
             //将解析的出来的再转成json再解析一次
-            Debug.Log(JavaScriptObjectFactory
-                .CreateJavaScriptObject(JavaScriptObjectFactory.CreateJavaScriptObject(json).ToJson()).ToJson());
-            Debug.Log(JavaScriptObjectFactory
-                .CreateJavaScriptObject(JavaScriptObjectFactory.CreateJavaScriptObject(json, false).ToJson(), false)
+            Debug.Log(JsonObjectFactory
+                .CreateJsonObject(JsonObjectFactory.CreateJsonObject(json).ToJson()).ToJson());
+            Debug.Log(JsonObjectFactory
+                .CreateJsonObject(JsonObjectFactory.CreateJsonObject(json, false).ToJson(), false)
                 .ToJson());
             //解析单个值的情况
-            Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject("1").ToJson());
-            Debug.Log(JavaScriptObjectFactory.CreateJavaScriptObject("1", false).ToJson());
+            Debug.Log(JsonObjectFactory.CreateJsonObject("1").ToJson());
+            Debug.Log(JsonObjectFactory.CreateJsonObject("1", false).ToJson());
         }
 
         private static double TimeTest(Action action)

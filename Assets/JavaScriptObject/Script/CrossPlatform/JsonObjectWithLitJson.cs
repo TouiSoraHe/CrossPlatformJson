@@ -4,64 +4,64 @@ using LitJson;
 namespace CrossPlatformJson
 {
 #if UNITY_STANDALONE_WIN || UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR
-    public class JavaScriptObjectWithLitJson : IJsonString2JavaScriptObjectHandle
+    public class JsonObjectWithLitJson : IJsonString2JsonObjectHandle
     {
-        public JavaScriptObject ToJavaScriptObject(string json)
+        public JsonObject ToJsonObject(string json)
         {
-            JavaScriptObject jsonObj = null;
+            JsonObject jsonObj = null;
             var jsonData = LitJson.JsonMapper.ToObject(json);
             Process(out jsonObj, jsonData);
             return jsonObj;
         }
 
-        private void Process(out JavaScriptObject jsonObj, JsonData jsonData)
+        private void Process(out JsonObject jsonObj, JsonData jsonData)
         {
             switch (jsonData.GetJsonType())
             {
                 case JsonType.None:
-                    jsonObj = new JavaScriptObject();
+                    jsonObj = new JsonObject();
                     break;
                 case JsonType.Object:
-                    jsonObj = new JavaScriptObject(JavaScriptObjectType.Object);
+                    jsonObj = new JsonObject(JsonObjectType.Object);
                     ProcessObject(jsonObj, jsonData);
                     break;
                 case JsonType.Array:
-                    jsonObj = new JavaScriptObject(JavaScriptObjectType.Array);
+                    jsonObj = new JsonObject(JsonObjectType.Array);
                     ProcessArray(jsonObj, jsonData);
                     break;
                 case JsonType.String:
-                    jsonObj = new JavaScriptObject(jsonData.ToString());
+                    jsonObj = new JsonObject(jsonData.ToString());
                     break;
                 case JsonType.Int:
                 case JsonType.Long:
                 case JsonType.Double:
-                    jsonObj = new JavaScriptObject(double.Parse(jsonData.ToString()));
+                    jsonObj = new JsonObject(double.Parse(jsonData.ToString()));
                     break;
                 case JsonType.Boolean:
-                    jsonObj = new JavaScriptObject(bool.Parse(jsonData.ToString()));
+                    jsonObj = new JsonObject(bool.Parse(jsonData.ToString()));
                     break;
                 default:
                     throw new Exception("意外情况");
             }
         }
 
-        private void ProcessObject(JavaScriptObject jsonObj, JsonData jsonData)
+        private void ProcessObject(JsonObject jsonObj, JsonData jsonData)
         {
             foreach (var item in jsonData.Keys)
             {
                 var subJsonData = jsonData[item];
-                var value = new JavaScriptObject();
+                var value = new JsonObject();
                 if (subJsonData != null) Process(out value, subJsonData);
                 jsonObj.Add(item, value);
             }
         }
 
-        private void ProcessArray(JavaScriptObject jsonObj, JsonData jsonData)
+        private void ProcessArray(JsonObject jsonObj, JsonData jsonData)
         {
             for (var i = 0; i < jsonData.Count; i++)
             {
                 var subJsonData = jsonData[i];
-                var value = new JavaScriptObject();
+                var value = new JsonObject();
                 if (subJsonData != null) Process(out value, subJsonData);
                 jsonObj.Add(value);
             }
